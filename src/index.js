@@ -9,7 +9,6 @@ app.use(express.static('public'));
 function onConnection(socket){
   socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));
   socket.on('setting', (data) => socket.broadcast.emit('setting', data));
-  console.log()
 }
 
 io.on('connection', onConnection);
