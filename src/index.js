@@ -4,11 +4,12 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3000;
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static('public'));
 
 function onConnection(socket){
   socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));
   socket.on('setting', (data) => socket.broadcast.emit('setting', data));
+  console.log()
 }
 
 io.on('connection', onConnection);
