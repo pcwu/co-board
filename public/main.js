@@ -7,7 +7,8 @@ const hello = function() {
   var context = canvas.getContext('2d');
 
   var current = {
-    color: 'black'
+    color: 'black',
+    width: 2
   };
   var drawing = false;
 
@@ -17,7 +18,7 @@ const hello = function() {
   canvas.addEventListener('mousemove', throttle(onMouseMove, 10), false);
 
   for (var i = 0; i < colors.length; i++){
-    colors[i].addEventListener('click', onColorUpdate, false);
+    colors[i].addEventListener('click', onSettingUpdate, false);
   }
 
   socket.on('drawing', onDrawingEvent);
@@ -26,15 +27,14 @@ const hello = function() {
   onResize();
 
 
-  function drawLine(x0, y0, x1, y1, color, emit){
+  function drawLine(x0, y0, x1, y1, color, width, emit){
     context.beginPath();
     context.moveTo(x0, y0);
     context.lineTo(x1, y1);
     context.strokeStyle = color;
-    context.lineWidth = 5;
+    context.lineWidth = width;
     context.lineCap = 'round';
     context.lineJoin = 'round';
-    context.setLineDash([4, 2]);
     context.stroke();
     context.closePath();
 
@@ -47,7 +47,8 @@ const hello = function() {
       y0: y0 / h,
       x1: x1 / w,
       y1: y1 / h,
-      color: color
+      color: color,
+      width: width
     });
   }
 
@@ -60,18 +61,24 @@ const hello = function() {
   function onMouseUp(e){
     if (!drawing) { return; }
     drawing = false;
-    drawLine(current.x, current.y, e.clientX, e.clientY, current.color, true);
+    drawLine(current.x, current.y, e.clientX, e.clientY, current.color, current.width, true);
   }
 
   function onMouseMove(e){
     if (!drawing) { return; }
-    drawLine(current.x, current.y, e.clientX, e.clientY, current.color, true);
+    drawLine(current.x, current.y, e.clientX, e.clientY, current.color, current.width, true);
     current.x = e.clientX;
     current.y = e.clientY;
   }
 
-  function onColorUpdate(e){
-    current.color = e.target.className.split(' ')[1];
+  function onSettingUpdate(e){
+    if(e.target.className.split(' ')[1] === 'eraser'){
+      current.color = 'white';
+      current.width = 15;
+    }else{
+      current.color = e.target.className.split(' ')[1];
+      current.width = 2;
+    }
   }
 
   // limit the number of events per second
@@ -90,7 +97,7 @@ const hello = function() {
   function onDrawingEvent(data){
     var w = canvas.width;
     var h = canvas.height;
-    drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color);
+    drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color, data.width);
   }
 
   // make the canvas fill its parent
