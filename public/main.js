@@ -1,7 +1,7 @@
 
 const hello = function() {
 
-  var socket = io("http://co-board.herokuapp.com");
+  var socket = io('//:3000');
   var canvas = document.getElementsByClassName('whiteboard')[0];
   var colors = document.getElementsByClassName('color');
   var context = canvas.getContext('2d');
@@ -53,6 +53,7 @@ const hello = function() {
   }
 
   function onMouseDown(e){
+    console.log("touch");
     drawing = true;
     current.x = e.clientX;
     current.y = e.clientY;
