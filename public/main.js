@@ -17,7 +17,7 @@ const hello = function() {
   canvas.addEventListener('mouseout', onMouseUp, false);
   canvas.addEventListener('mousemove', throttle(onMouseMove, 10), false);
 
-  canvas.addEventListener('touchdown', onMouseDown, false);
+  canvas.addEventListener('touchstart', onMouseDown, false);
   canvas.addEventListener('touchend', onMouseUp, false);
   canvas.addEventListener('touchmove', onMouseMove, false);
 
@@ -39,7 +39,7 @@ const hello = function() {
           touchY=touch.pageY-touch.target.offsetTop;
       }
     };
-    return touchX || e.clientX;
+    return e.targetTouches[0].clientX || e.clientX;
   }
 
   function getY(e) {
@@ -51,7 +51,7 @@ const hello = function() {
           touchY=touch.pageY-touch.target.offsetTop;
       }
     };
-    return touchY || e.clientY;
+    return e.targetTouches[0].clientY || e.clientY;
   }
 
 
