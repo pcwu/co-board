@@ -1,7 +1,7 @@
 
 const hello = function() {
 
-  var socket = io('//:3000');
+  var socket = io('http://co-board.herokuapp.com');
   var canvas = document.getElementsByClassName('whiteboard')[0];
   var colors = document.getElementsByClassName('color');
   var context = canvas.getContext('2d');
