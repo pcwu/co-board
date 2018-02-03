@@ -39,7 +39,7 @@ const hello = function() {
           touchY=touch.pageY-touch.target.offsetTop;
       }
     };
-    return e.targetTouches[0].clientX || e.clientX;
+    return e.clientX || e.targetTouches[0].clientX;
   }
 
   function getY(e) {
@@ -51,7 +51,7 @@ const hello = function() {
           touchY=touch.pageY-touch.target.offsetTop;
       }
     };
-    return e.targetTouches[0].clientY || e.clientY;
+    return e.clientY || e.targetTouches[0].clientY;
   }
 
 
