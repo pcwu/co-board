@@ -17,6 +17,10 @@ const hello = function() {
   canvas.addEventListener('mouseout', onMouseUp, false);
   canvas.addEventListener('mousemove', throttle(onMouseMove, 10), false);
 
+  canvas.addEventListener('touchdown', onMouseDown, false);
+  canvas.addEventListener('touchend', onMouseUp, false);
+  canvas.addEventListener('touchmove', onMouseMove, false);
+
   for (var i = 0; i < colors.length; i++){
     colors[i].addEventListener('click', onSettingUpdate, false);
   }
@@ -25,6 +29,30 @@ const hello = function() {
 
   window.addEventListener('resize', onResize, false);
   onResize();
+
+  function getX(e) {
+    var touchX = null;
+    if (e.touches) {
+      if (e.touches.length == 1) { // Only deal with one finger
+          var touch = e.touches[0]; // Get the information for finger #1
+          touchX=touch.pageX-touch.target.offsetLeft;
+          touchY=touch.pageY-touch.target.offsetTop;
+      }
+    };
+    return touchX || e.clientX;
+  }
+
+  function getY(e) {
+    var touchY = null;
+    if (e.touches) {
+      if (e.touches.length == 1) { // Only deal with one finger
+          var touch = e.touches[0]; // Get the information for finger #1
+          touchX=touch.pageX-touch.target.offsetLeft;
+          touchY=touch.pageY-touch.target.offsetTop;
+      }
+    };
+    return touchY || e.clientY;
+  }
 
 
   function drawLine(x0, y0, x1, y1, color, width, emit){
@@ -53,22 +81,23 @@ const hello = function() {
   }
 
   function onMouseDown(e){
+    console.log(getX(e));
     drawing = true;
-    current.x = e.clientX;
-    current.y = e.clientY;
+    current.x = getX(e);
+    current.y = getY(e);
   }
 
   function onMouseUp(e){
-    if (!drawing) { return; }
+    if (!drawing && !e.touches) { return; }
     drawing = false;
-    drawLine(current.x, current.y, e.clientX, e.clientY, current.color, current.width, true);
+    drawLine(current.x, current.y, getX(e), getY(e), current.color, current.width, true);
   }
 
   function onMouseMove(e){
-    if (!drawing) { return; }
-    drawLine(current.x, current.y, e.clientX, e.clientY, current.color, current.width, true);
-    current.x = e.clientX;
-    current.y = e.clientY;
+    if (!drawing && !e.touches) { return; }
+    drawLine(current.x, current.y, getX(e), getY(e), current.color, current.width, true);
+    current.x = getX(e);
+    current.y = getY(e);
   }
 
   function onSettingUpdate(e){
