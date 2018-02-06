@@ -81,18 +81,21 @@ const hello = function() {
   }
 
   function onMouseDown(e){
+    e.preventDefault();
     drawing = true;
     current.x = getX(e);
     current.y = getY(e);
   }
 
   function onMouseUp(e){
+    e.preventDefault();
     if (!drawing && !e.touches) { return; }
     drawing = false;
     drawLine(current.x, current.y, getX(e), getY(e), current.color, current.width, true);
   }
 
   function onMouseMove(e){
+    e.preventDefault();
     if (!drawing && !e.touches) { return; }
     drawLine(current.x, current.y, getX(e), getY(e), current.color, current.width, true);
     current.x = getX(e);
@@ -100,6 +103,7 @@ const hello = function() {
   }
 
   function onSettingUpdate(e){
+    e.preventDefault();
     if(e.target.className.split(' ')[1] === 'eraser'){
       current.color = 'white';
       current.width = 15;
