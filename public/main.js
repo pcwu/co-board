@@ -134,6 +134,8 @@ const hello = function() {
     canvas.height = window.innerHeight;
   }
 
+  setTimeout(onResize , 1000);
+
 };
 
 hello();
